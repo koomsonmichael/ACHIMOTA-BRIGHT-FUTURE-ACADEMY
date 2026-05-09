@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ABFA School System</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:#F0F3FA;color:#1e2a3a;}
+.app{display:flex;min-height:100vh;}
+.sidebar{width:230px;background:linear-gradient(175deg,#1A3A6B 60%,#0e2247);display:flex;flex-direction:column;position:fixed;height:100vh;top:0;left:0;z-index:100;overflow-y:auto;}
+.sidebar-logo{padding:20px 16px 14px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;}
+.logo-crest{width:38px;height:38px;background:linear-gradient(135deg,#D4A017,#f5c842);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#1A3A6B;flex-shrink:0;}
+.logo-name{font-family:'Playfair Display',serif;font-size:10.5px;font-weight:700;color:#fff;line-height:1.3;text-transform:uppercase;}
+.logo-motto{font-size:8.5px;color:rgba(255,255,255,.4);margin-top:1px;}
+.sec-label{font-size:9px;font-weight:600;letter-spacing:1.5px;color:rgba(255,255,255,.35);text-transform:uppercase;padding:12px 16px 3px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 16px;margin:1px 7px;border-radius:8px;cursor:pointer;color:rgba(255,255,255,.65);font-size:13px;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-item.active{background:rgba(212,160,23,.2);color:#fff;font-weight:500;border-left:3px solid #D4A017;margin-left:4px;padding-left:13px;}
+.sidebar-footer{margin-top:auto;padding:12px;border-top:1px solid rgba(255,255,255,.08);}
+.user-pill{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.06);border-radius:9px;padding:9px;}
+.user-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#2756A8,#D4A017);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:600;}
+.main{margin-left:230px;flex:1;display:flex;flex-direction:column;}
+.conn-bar{padding:7px 14px;font-size:12px;font-weight:500;text-align:center;background:linear-gradient(90deg,#DCFCE7,#D1FAE5);color:#16A34A;display:flex;align-items:center;justify-content:center;gap:14px;}
+.topbar{background:#fff;padding:11px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e5e9f2;position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.topbar-title{font-family:'Playfair Display',serif;font-size:17px;color:#1A3A6B;}
+.page{padding:22px;flex:1;}
+.card{background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(26,58,107,.07);border:1px solid rgba(26,58,107,.06);overflow:hidden;margin-bottom:16px;}
+.card-header{padding:14px 18px 11px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f3fa;}
+.card-title{font-family:'Playfair Display',serif;font-size:15px;color:#1A3A6B;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:18px;}
+.stat-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 10px rgba(26,58,107,.07);display:flex;align-items:flex-start;gap:12px;}
+.stat-icon{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.stat-val{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#1A3A6B;line-height:1;}
+.stat-lbl{font-size:11px;color:#6B7280;margin-top:3px;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th{background:#F8FAFF;color:#6B7280;font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;padding:9px 13px;text-align:left;border-bottom:1px solid #EEF2FF;}
+td{padding:10px 13px;border-bottom:1px solid #F5F7FF;color:#374151;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#FAFBFF;}
+.av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#2756A8,#1A3A6B);display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;margin-right:7px;}
+.td-n{display:flex;align-items:center;}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
+.b-paid,.b-present{background:#DCFCE7;color:#16A34A;}
+.b-pending,.b-late{background:#FEF3C7;color:#D97706;}
+.b-overdue,.b-absent{background:#FEE2E2;color:#DC2626;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:'DM Sans',sans-serif;}
+.btn-primary{background:linear-gradient(135deg,#2756A8,#1A3A6B);color:#fff;}
+.btn-primary:hover{opacity:.9;}
+.btn-ghost{background:#F0F3FA;color:#6B7280;}
+.btn-ghost:hover{background:#E4E9F4;}
+.btn-danger{background:#FEE2E2;color:#DC2626;}
+.btn-gold{background:linear-gradient(135deg,#D4A017,#f0b820);color:#fff;}
+.btn-sms{background:linear-gradient(135deg,#16A34A,#22C55E);color:#fff;}
+.btn-sm{padding:4px 9px;font-size:11.5px;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg label{font-size:11.5px;font-weight:600;color:#374151;}
+.fc{padding:8px 11px;border-radius:8px;border:1.5px solid #E5E9F2;font-size:13px;font-family:'DM Sans',sans-serif;color:#1e2a3a;background:#fff;outline:none;width:100%;}
+.fc:focus{border-color:#2756A8;box-shadow:0 0 0 3px rgba(39,86,168,.1);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tab-bar{display:flex;gap:3px;background:#F0F3FA;padding:3px;border-radius:9px;margin-bottom:16px;width:fit-content;}
+.tab-btn{padding:6px 13px;border-radius:7px;border:none;cursor:pointer;font-size:12.5px;font-weight:500;font-family:'DM Sans',sans-serif;transition:all .15s;color:#6B7280;background:transparent;}
+.tab-btn.active{background:#fff;color:#1A3A6B;box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.prog-track{height:7px;background:#EEF2FF;border-radius:10px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:10px;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;}
+.modal{background:#fff;border-radius:14px;padding:24px;width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;color:#1A3A6B;margin-bottom:18px;}
+.modal-footer{display:flex;gap:8px;margin-top:18px;justify-content:flex-end;}
+.toast{position:fixed;bottom:20px;right:20px;color:#fff;padding:12px 18px;border-radius:9px;font-size:13px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.25);animation:slideIn .3s ease;max-width:340px;line-height:1.4;}
+@keyframes slideIn{from{transform:translateX(100px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+.info-box{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:9px;padding:12px 14px;font-size:12.5px;color:#1D4ED8;margin-bottom:14px;}
+.empty{text-align:center;padding:36px;color:#9CA3AF;}
+.chart-row{display:flex;align-items:center;gap:9px;margin-bottom:9px;font-size:12px;}
+.chart-lbl{width:70px;color:#6B7280;text-align:right;flex-shrink:0;}
+.chart-track{flex:1;height:8px;background:#EEF2FF;border-radius:10px;overflow:hidden;}
+.chart-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#2756A8,#5A8DE6);}
+.chart-val{width:34px;font-weight:600;color:#1A3A6B;font-size:11px;}
+.grade{display:inline-flex;align-items:center;justify-content:center;width:28px;height:25px;border-radius:6px;font-size:12px;font-weight:700;}
+.gA{background:#DCFCE7;color:#16A34A;}.gB{background:#E0EFFE;color:#2756A8;}.gC{background:#FEF3C7;color:#D97706;}.gD{background:#FEE2E2;color:#DC2626;}
+</style>
+</head>
+<body>
+<div id="root"><div style="display:flex;align-items:center;justify-content:center;height:100vh;gap:12px;color:#6B7280"><div style="width:22px;height:22px;border:2.5px solid #E5E9F2;border-top-color:#2756A8;border-radius:50%;animation:spin .7s linear infinite"></div>Connecting to Firebase…</div></div>
+<style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const FIREBASE = {
+  apiKey:"AIzaSyDvvaMHl7aZmUhUn59Hp5YMGjHhBWHlME8",
+  authDomain:"achimota-bright-future-academy.firebaseapp.com",
+  projectId:"achimota-bright-future-academy",
+  storageBucket:"achimota-bright-future-academy.appspot.com",
+  messagingSenderId:"906341520460",
+  appId:"1:906341520460:web:4602e00e9192db4e8e4c1a"
+};
+const ARKESEL_KEY="222a5f151807b7dc84b8d0fe6d4475fa";
+const ARKESEL_SENDER="ABFA";
+const app=initializeApp(FIREBASE);
+const db=getFirestore(app);
+
+async function sendSMS(phone,message){
+  if(!phone||phone.length<9){toast("⚠️ No valid phone number","#D97706");return false;}
+  let num=phone.replace(/\s+/g,"").replace(/^0/,"233");
+  try{const res=await fetch(`https://sms.arkesel.com/sms/api?action=send-sms&api_key=${ARKESEL_KEY}&to=${num}&from=${ARKESEL_SENDER}&sms=${encodeURIComponent(message)}`);const data=await res.json();if(data.code==="ok"){toast("📲 SMS sent!","#16A34A");await addDoc(collection(db,"sms_log"),{phone:num,message,status:"sent",sentAt:serverTimestamp()});return true;}else{toast("❌ SMS failed","#DC2626");return false;}}catch(e){toast("❌ Error: "+e.message,"#DC2626");return false;}}
+
+const CLASSES=["Creche","Nursery 1","Nursery 2","KG 1","KG 2","Basic 1","Basic 2","Basic 3","Basic 4","Basic 5","Basic 6","JHS 1","JHS 2","JHS 3"];
+const SUBJECTS=["Mathematics","English","Science","Social Studies","ICT","French","R.M.E","Creative Arts"];
+const gradeFor=t=>t>=80?"A":t>=65?"B":t>=50?"C":"D";
+const todayStr=()=>new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
+
+let toastTimer;
+function toast(msg,bg="#1A3A6B"){
+  document.querySelector(".toast")?.remove();
+  clearTimeout(toastTimer);
+  const el=document.createElement("div");
+  el.className="toast";
+  el.style.background=bg;
+  el.textContent=msg;
+  document.body.appendChild(el);
+  toastTimer=setTimeout(()=>el.remove(),4000);
+}
+
+let page="dashboard";
+let students=[],results=[],fees=[],inventory=[],messages=[],smsLog=[];
+let activeMsg=0,studentTab="list",studentSearch="";
+let editingStudent=null,editingResult=null;
+let showAddResult=false,showAddFee=false,showAddInv=false,showSMSModal=false;
+let smsTarget=null;
+let attState={};
+const attDays=["Mon 5","Tue 6","Wed 7","Thu 8","Fri 9"];
+
+onSnapshot(collection(db,"students"),s=>{students=s.docs.map(d=>({id:d.id,...d.data()}));render();});
+onSnapshot(collection(db,"results"),s=>{results=s.docs.map(d=>({id:d.id,...d.data()}));render();});
+onSnapshot(collection(db,"fees"),s=>{fees=s.docs.map(d=>({id:d.id,...d.data()}));render();});
+onSnapshot(collection(db,"inventory"),s=>{inventory=s.docs.map(d=>({id:d.id,...d.data()}));render();});
+onSnapshot(query(collection(db,"messages"),orderBy("createdAt","asc")),s=>{messages=s.docs.map(d=>({id:d.id,...d.data()}));render();});
+onSnapshot(query(collection(db,"sms_log"),orderBy("sentAt","desc")),s=>{smsLog=s.docs.map(d=>({id:d.id,...d.data()}));render();});
+
+const addStudent=d=>addDoc(collection(db,"students"),{...d,attend:100,fee:"Pending",createdAt:serverTimestamp()});
+const saveStudent=(id,d)=>updateDoc(doc(db,"students",id),d);
+const delStudent=id=>deleteDoc(doc(db,"students",id));
+const addResult=d=>addDoc(collection(db,"results"),{...d,createdAt:serverTimestamp()});
+const saveResult=(id,d)=>updateDoc(doc(db,"results",id),d);
+const delResult=id=>deleteDoc(doc(db,"results",id));
+const addFee=d=>addDoc(collection(db,"fees"),{...d,createdAt:serverTimestamp()});
+const markPaid=id=>updateDoc(doc(db,"fees",id),{status:"Paid",date:todayStr()});
+const delFee=id=>deleteDoc(doc(db,"fees",id));
+const addInvItem=d=>addDoc(collection(db,"inventory"),{...d,createdAt:serverTimestamp()});
+const adjustInv=(id,qty)=>updateDoc(doc(db,"inventory",id),{qty:Math.max(0,qty),alert:qty<20});
+const delInv=id=>deleteDoc(doc(db,"inventory",id));
+const addMessage=d=>addDoc(collection(db,"messages"),{...d,createdAt:serverTimestamp()});
+
+function render(){
+  document.getElementById("root").innerHTML=buildApp();
+  attachListeners();
+}
+
+function buildApp(){
+  const nav=[{sec:"MAIN",items:[{id:"dashboard",icon:"🏠",lbl:"Dashboard"}]},{sec:"ACADEMICS",items:[{id:"students",icon:"🎓",lbl:"Students"},{id:"results",icon:"📊",lbl:"Results"},{id:"attendance",icon:"✅",lbl:"Attendance"}]},{sec:"FINANCE",items:[{id:"fees",icon:"💰",lbl:"Fees"}]},{sec:"OPERATIONS",items:[{id:"inventory",icon:"📦",lbl:"Inventory"},{id:"messages",icon:"💬",lbl:"Messages"}]},{sec:"SMS",items:[{id:"sms",icon:"📲",lbl:"SMS Notifications"}]}];
+  const titles={dashboard:"Dashboard",students:"Students",results:"Results",attendance:"Attendance",fees:"Fees & Payments",inventory:"Inventory",messages:"Messages",sms:"SMS Notifications"};
+  const pageHTML={dashboard:buildDashboard(),students:buildStudents(),results:buildResults(),attendance:buildAttendance(),fees:buildFees(),inventory:buildInventory(),messages:buildMessages(),sms:buildSMS()}[page]||"";
+  return `<div class="app"><aside class="sidebar"><div class="sidebar-logo"><div class="logo-crest">A</div><div><div class="logo-name">Achimota Bright Future Academy</div><div class="logo-motto">Nurturing Heart, Head & Hand</div></div></div>${nav.map(s=>`<div class="sec-label">${s.sec}</div>${s.items.map(i=>`<div class="nav-item ${page===i.id?"active":""}" data-page="${i.id}">${i.icon} ${i.lbl}</div>`).join("")}`).join("")}<div class="sidebar-footer"><div class="user-pill"><div class="user-av">SA</div><div><div style="font-size:12px;color:#fff;font-weight:500">Super Admin</div><div style="font-size:10px;color:rgba(255,255,255,.45)">Full Access</div></div></div></div></aside><main class="main"><div class="conn-bar"><span>🟢 Firebase Live</span><span>|</span><span>📲 Arkesel SMS Active</span><span>|</span><span>📨 ${smsLog.length} SMS Sent</span></div><div class="topbar"><div class="topbar-title">${titles[page]||""}</div><div style="display:flex;gap:7px;align-items:center"><span style="font-size:11px;color:#16A34A;background:#DCFCE7;padding:3px 10px;border-radius:20px;font-weight:500">🔴 Live</span><div style="width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#2756A8,#1A3A6B);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:600">SA</div></div></div><div class="page">${pageHTML}</div></main></div>${showSMSModal?buildSMSModal():""}`;
+}
+
+function buildDashboard(){
+  const paid=fees.filter(f=>f.status==="Paid").reduce((a,b)=>a+(b.amount||0),0);
+  const attAvg=students.length?Math.round(students.reduce((a,b)=>a+(b.attend||0),0)/students.length):0;
+  return `<div class="stats-grid"><div class="stat-card"><div class="stat-icon" style="background:#E8EEF9">🎓</div><div><div class="stat-val">${students.length}</div><div class="stat-lbl">Total Students</div></div></div><div class="stat-card"><div class="stat-icon" style="background:#DCFCE7">💰</div><div><div class="stat-val">GH₵${paid.toLocaleString()}</div><div class="stat-lbl">Fees Collected</div></div></div><div class="stat-card"><div class="stat-icon" style="background:#E0EFFE">✅</div><div><div class="stat-val">${attAvg}%</div><div class="stat-lbl">Avg Attendance</div></div></div><div class="stat-card"><div class="stat-icon" style="background:#F0FDF4">📲</div><div><div class="stat-val">${smsLog.length}</div><div class="stat-lbl">SMS Sent</div></div></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div class="card"><div class="card-header"><div class="card-title">Attendance by Dept</div></div><div style="padding:13px 16px 7px">${[{l:"JHS",p:92},{l:"Primary",p:87},{l:"KG",p:95},{l:"Nursery",p:83}].map(d=>`<div class="chart-row"><div class="chart-lbl">${d.l}</div><div class="chart-track"><div class="chart-fill" style="width:${d.p}%"></div></div><div class="chart-val">${d.p}%</div></div>`).join("")}</div></div><div class="card"><div class="card-header"><div class="card-title">Recent SMS</div></div><div style="padding:12px 16px">${smsLog.length===0?`<div class="empty" style="padding:20px">No SMS sent yet</div>`:smsLog.slice(0,5).map(s=>`<div style="display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid #F5F7FF"><div style="width:28px;height:28px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📲</div><div><div style="font-size:12.5px;font-weight:500;color:#1A3A6B">${s.phone}</div><div style="font-size:11px;color:#6B7280;margin-top:2px">${(s.message||"").substring(0,60)}…</div></div></div>`).join("")}</div></div></div><div class="card"><div class="card-header"><div class="card-title">Recent Students</div></div>${students.length===0?`<div class="empty">No students yet</div>`:`<table><thead><tr><th>Student</th><th>Class</th><th>Guardian Phone</th><th>Fee</th><th>SMS</th></tr></thead><tbody>${students.slice(0,5).map(s=>`<tr><td><div class="td-n"><div class="av">${(s.name||"?")[0]}</div>${s.name}</div></td><td>${s.class||"—"}</td><td style="font-size:11.5px;color:#6B7280">${s.phone||"No number"}</td><td><span class="badge b-${(s.fee||"pending").toLowerCase()}">${s.fee||"Pending"}</span></td><td><button class="btn btn-sms btn-sm" data-sms-student="${s.id}">📲 SMS</button></td></tr>`).join("")}</tbody></table>`}</div>`;
+}
+
+function buildStudents(){
+  const filtered=students.filter(s=>(s.name||"").toLowerCase().includes(studentSearch.toLowerCase())||(s.class||"").toLowerCase().includes(studentSearch.toLowerCase()));
+  return `<div class="tab-bar"><button class="tab-btn ${studentTab==="list"?"active":""}" data-stab="list">Student List</button><button class="tab-btn ${studentTab==="register"?"active":""}" data-stab="register">+ Register Student</button></div>${studentTab==="list"?`<div class="card"><div class="card-header"><div class="card-title">All Students (${filtered.length})</div><input class="fc" id="s-search" style="width:180px;padding:5px 9px" placeholder="🔍 Search…" value="${studentSearch}"></div>${filtered.length===0?`<div class="empty">No students found</div>`:`<table><thead><tr><th>Student</th><th>Class</th><th>Dept</th><th>Guardian</th><th>Phone</th><th>Fee</th><th>Actions</th></tr></thead><tbody>${filtered.map(s=>`<tr><td><div class="td-n"><div class="av">${(s.name||"?")[0]}</div>${s.name}</div></td><td>${s.class||"—"}</td><td><span style="font-size:10.5px;background:#E8EEF9;color:#2756A8;padding:2px 7px;border-radius:20px">${s.dept||"—"}</span></td><td style="font-size:12px;color:#6B7280">${s.guardian||"—"}</td><td style="font-size:12px;color:#6B7280">${s.phone||"—"}</td><td><span class="badge b-${(s.fee||"pending").toLowerCase()}">${s.fee||"Pending"}</span></td><td><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn btn-sms btn-sm" data-sms-student="${s.id}">📲</button><button class="btn btn-ghost btn-sm" data-edit-student="${s.id}">✏️</button><button class="btn btn-danger btn-sm" data-del-student="${s.id}">🗑️</button></div></td></tr>`).join("")}</tbody></table>`}</div>`:`<div class="card" style="max-width:580px"><div class="card-header"><div class="card-title">Register New Student</div></div><div style="padding:20px"><div class="form-grid"><div class="fg"><label>Full Name *</label><input class="fc" id="s-name" placeholder="e.g. Kwame Asante"></div><div class="fg"><label>Gender</label><select class="fc" id="s-gender"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="fg"><label>Department *</label><select class="fc" id="s-dept"><option value="">Select</option><option>Preschool
