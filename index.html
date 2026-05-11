@@ -133,7 +133,8 @@ let smsTarget=null;
 let attState={};
 const attDays=["Mon 5","Tue 6","Wed 7","Thu 8","Fri 9"];
 
-onSnapshot(collection(db,"students"),s=>{students=s.docs.map(d=>({id:d.id,...d.data()}));render();});
+render();
+  onSnapshot(collection(db,"students"),s=>{students=s.docs.map(d=>({id:d.id,...d.data()}));render();});
 onSnapshot(collection(db,"results"),s=>{results=s.docs.map(d=>({id:d.id,...d.data()}));render();});
 onSnapshot(collection(db,"fees"),s=>{fees=s.docs.map(d=>({id:d.id,...d.data()}));render();});
 onSnapshot(collection(db,"inventory"),s=>{inventory=s.docs.map(d=>({id:d.id,...d.data()}));render();});
